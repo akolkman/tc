@@ -66,7 +66,7 @@ fun processImage(image: Path, trimmedRoot: Path, cfg: Args) {
     val meta = parseBucketMeta(image)
     println(meta)
 
-    val trimmedImage = trimAndSave(image, trimmedRoot, meta.diaMm, meta.dpi, meta.deg)
+    val trimmedImage = trimAndSave(image, trimmedRoot, meta.clusterName, meta.diaMm, meta.dpi, meta.deg)
     println("Trimmed dimensions = ${trimmedImage.width}, ${trimmedImage.height}")
 
     println("Degrees from the wrapper = ${meta.deg}")
@@ -119,6 +119,7 @@ fun processImage(image: Path, trimmedRoot: Path, cfg: Args) {
     val fileName =  buildString {
         append(name)
         append("__sx"); append(fmtSignedInt(sx))
+        append("__sx"); append(fmtSignedInt(sx))
         append("__cx"); append(fmtSignedInt(cx))
         append("__original")
         append(".png")
@@ -132,6 +133,7 @@ fun processImage(image: Path, trimmedRoot: Path, cfg: Args) {
 fun trimAndSave(
     image: Path,
     trimmedRoot: Path,
+    clusterName: String,
     diaMm: Double,
     dpi: Double,
     angle: Double
@@ -150,7 +152,7 @@ fun trimAndSave(
 
     val trimmedImage = cropRight(img, targetWidth)
 
-    val outputPath = trimmedRoot.resolve(image.nameWithoutExtension + "__${angle.toInt()}.png")
+    val outputPath = trimmedRoot.resolve(image.nameWithoutExtension + "__${clusterName}__${angle.toInt()}.png")
 
     val ok = ImageIO.write(trimmedImage, "png", outputPath.toFile())
     if (!ok) error("No ImageIO writer found for PNG when writing: $outputPath")

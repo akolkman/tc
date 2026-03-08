@@ -9,7 +9,10 @@ data class BucketMeta(
     val diaMm: Double,
     val dpi: Double,
     val deg: Double
-)
+) {
+    val clusterName: String
+        get() = "${bucket}_${diaMm.toInt()}"
+}
 
 fun parseBucketMeta(imagePath: Path): BucketMeta {
     val parent = imagePath.parent?.fileName?.toString()
